@@ -1,0 +1,29 @@
+<style>
+#foo {
+    position: relative;
+}
+#black {
+    width: 100px;
+    height: 100px;
+    z-index: 2;
+}
+img {
+    z-index: 1;
+    position: relative;
+    bottom: 100px;
+}
+
+</style>
+<script type="text/javascript">
+    window.Flow = {
+        me : this,
+        math : function() {
+          alert(me);  
+        }
+    };
+</script>
+
+<div id="foo">
+    <div id="black"></div>
+    <img src="" style="width: 100px; height: 100px"/>
+</div>
