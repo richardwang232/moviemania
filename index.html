@@ -1,18 +1,20 @@
 <html>
   <head>
-    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="main.css">
-    <script type="text/javascript" src="sha1.js"></script>
-    <script type="text/javascript" src="codebird.js"></script>
-  <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.8.2/jquery.min.js" type="text/javascript"></script>
-  <script src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.2/underscore-min.js" type="text/javascript"></script>
-  <script src="http://cdnjs.cloudflare.com/ajax/libs/backbone.js/0.9.2/backbone-min.js"></script>
-  <script src="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+    <link rel="stylesheet/less" type="text/css" href="styles.less" />
+<!--
+  <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
+  <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.2/js/bootstrap.min.js"></script>
+-->
+<script data-main="js/main" src="http://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.9/require.min.js"></script>
   </head>
   <body>
 
     
-
+    <form id="search-movies-form">
+      <input type="text" name="search-movie"/>
+      <input type="submit" val="Go"/>
+    </div>
     
 
     
@@ -73,158 +75,8 @@
     
     
     <script type="text/javascript">     
-      var Movie = Backbone.Model.extend({
-        defaults: {
-
-        }
-      });
-      
-      var Movies = Backbone.Collection.extend({
         
-      });
-      
-      var MovieList = Backbone.View.extend({
-        el: ".movies",
-        events: {
-          "click .addMovieBtn": "addMovie",
-          "click img": "highlightMovie",
 
-        },
-        initialize: function() {
-          this.collection = new Movies(movieData);
-          this.render();
-        },
-        addMovie: function() {
-/*          var movie = new Movie();
-          movie.title = $("#movieVal").val();
-          this.collection.add(movie);
-          this.render();
-*/
-        },
-        render: function() {
-          var movieData = this.collection.toJSON();
-          var template = _.template($('#movie_template').html(), {movies:movieData});
-          this.$el.html(template);
-          for (var i = 0; i<movieData.length; i++)
-          {
-            _.each(movieData, function (item) {
-                this.loadImage(item.title, item.imgURL);
-            }, this);
-            
-          }
-          
-
-        },
-        search: function(event) {
-          alert("hi");
-          console.log("hi");
-
-        },
-        loadImage: function(movie, imgURL) {
-          if (imgURL == "")
-          {
-            var movieQueryTerm = movie.split(" ").join("+");
-                    $.getJSON(
-                      "https://www.googleapis.com/customsearch/v1?key=AIzaSyAFeatRyqgpVPELTJJx5NqUhPvbNtHw7cA&cx=016431179489150875368:gflbuhxjoto&q="+movieQueryTerm+"+movie+poster&searchType=image&alt=json",
-                      function(result) {
-                          console.log(result.items[0].link);
-                          var movieId = movie.split(" ").join("-");
-                          console.log(movieId);
-                          $("#"+movieId).attr("src", result.items[0].link);
-                      });
-          }         
-          else
-          {
-            var movieId = movie.split(" ").join("-");
-            $("#"+movieId).attr("src", imgURL);
-          }
-        },
-        highlightMovie: function(event)
-        {
-          $("ul img").each(function(index, element) {
-            $(element).css('border', '3px solid black');
-          });
-          $(event.srcElement).css('border', "3px solid blue"); 
-//          console.log(event);
-        }
-
-      });
-      
-      var movieList = new MovieList();
-      
-      var TweetList = Backbone.View.extend({
-        el: ".tweets-container",
-        
-        initialize: function() {
-          this.template = _.template($('#tweet_template').html());
-
-        },
-        
-        render: function(title) {
-          var me = this;
-          var title = decodeURIComponent(title);
-          var tweets = this.getTweets(title, function(title, tweets) {
-            var template = me.template({title: title, tweets: tweets});
-            me.$el.hide().html(template).fadeIn(800);              
-          });
-            
-        },
-        getTweets: function(title, fn) {
-/*
-      var cb = new Codebird;
-      cb.setConsumerKey("dJubmPzGfaSiM4z6enh5Pw", "QdulpG2gTkfftg2yaGxYYgbqTwF3BoARsqizRi54rc");
-      cb.__call(
-        "oauth2_token",
-        {},
-        function (reply) {
-            var bearer_token = reply.access_token;
-            console.log(bearer_token);
-        }
-      );
-    
-    cb.__call(
-    "search_tweets",
-    "q="+encodeURIComponent(title)+"&lang=en",
-    function (response) {
-        console.log(response);
-        var tweetObjs = response.statuses;
-        console.log(tweetObjs);
-        var tweets = [];
-        for (var i = 0; i < tweetObjs.length; i++)
-        {
-          tweets.push({"content": tweetObjs[i].text});
-        }
-        console.log(tweets);
-        fn(title,tweets);
-    },
-    true // this parameter required
-    );
-*/
-         fn(title,movieTweets[title]);
-
-        }
-      });
-      
-      var tweetList = new TweetList();
-      
-      var Router = Backbone.Router.extend({
-          routes: {
-          '': 'home',
-          'tweets/:title': 'tweets',
-
-          }
-      });
-      
-      var router = new Router();
-      router.on('route:home', function() {
-          movieList.render();
-      });
-      router.on('route:tweets', function(title) {
-        $('.tweets').remove();
-          tweetList.render(title);
-      });
-      
-      Backbone.history.start();
       
 
 
