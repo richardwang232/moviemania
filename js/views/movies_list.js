@@ -4,92 +4,86 @@ define([
   'backbone',
   'mustache',
   'models/movie',
+  'models/tmdb_config',
   'collections/movies',
   'text!../../templates/movies_list.html'
 ], 
-function($, _, Backbone, Mustache, Movie, MoviesCollection, MoviesListTemplate) {
+function($, _, Backbone, Mustache, Movie, TMDBConfig, MoviesCollection, MoviesListTemplate) {
   var MovieList = Backbone.View.extend({
-  el: "#movies-container",
-  events: {
-    "click .addMovieBtn": "addMovie",
-    "click img": "highlightMovie",
+    el: "#movies-container",
+    events: {
+      "click .addMovieBtn": "addMovie",
+      "click img": "highlightMovie",
 
-  },
-  initialize: function() {
-    this.collection = MoviesCollection;
-    this.render();
-  },
-  
-  addMovie: function() {
-  /*          var movie = new Movie();
-    movie.title = $("#movieVal").val();
-    this.collection.add(movie);
-    this.render();
-  */
-  },
+    },
+    initialize: function() {
+      var that = this;
+      this.collection = MoviesCollection;
+      this.collection.fetch({
+        success: _.bind(that.render, this)
+      });
+    },
+    render: function() {
+      var movies = this.collection.toJSON();
+      var that = this;
+      //** creates the template based on our movies collection and uses base_url and poster_size to as config 
+      //** parameters
+      var template = Mustache.render(MoviesListTemplate, {
+        movies : movies,
+        base_url : TMDBConfig.get("images").base_url, //** from TMDB /config API call
+        poster_size : TMDBConfig.get("images").poster_sizes[5]
+      });
+      that.$el.html(template);
 
-  render: function() {
-    var movieData = this.collection.toJSON();
-    var template = Mustache.render(MoviesListTemplate, movieData);
-    this.$el.html(template);
+      //** some code found on the Internet to fix issues with Bootstrap carousel
+      $('#myCarousel').carousel({
+        interval: false
+      })
 
-    $('#myCarousel').carousel({
-      interval: false
-    })
+      $('.carousel .item').each(function(){
+        var next = $(this).next();
+        if (!next.length) {
+          next = $(this).siblings(':first');
+        }
+        next.children(':first-child').clone().appendTo($(this));
+        
+        if (next.next().length>0) {
+          next.next().children(':first-child').clone().appendTo($(this));
+        }
+        else {
+          $(this).siblings(':first').children(':first-child').clone().appendTo($(this));
+        }
+      });
 
-    $('.carousel .item').each(function(){
-      var next = $(this).next();
-      if (!next.length) {
-        next = $(this).siblings(':first');
-      }
-      next.children(':first-child').clone().appendTo($(this));
-      
-      if (next.next().length>0) {
-        next.next().children(':first-child').clone().appendTo($(this));
-      }
-      else {
-        $(this).siblings(':first').children(':first-child').clone().appendTo($(this));
-      }
-    });
-
-    $('.carousel .item').eq(0).addClass("active");
-  },
-
-  search: function(event) {
-    alert("hi");
-    console.log("hi");
-  },
-
-  loadImage: function(movie, imgURL) {
-    if (imgURL == "")
+      $('.carousel .item').eq(0).addClass("active");
+      //** end of that code 
+    },
+    highlightMovie: function(event)
     {
-      var movieQueryTerm = movie.split(" ").join("+");
-              $.getJSON(
-                "https://www.googleapis.com/customsearch/v1?key=AIzaSyAFeatRyqgpVPELTJJx5NqUhPvbNtHw7cA&cx=016431179489150875368:gflbuhxjoto&q="+movieQueryTerm+"+movie+poster&searchType=image&alt=json",
-                function(result) {
-                    console.log(result.items[0].link);
-                    var movieId = movie.split(" ").join("-");
-                    console.log(movieId);
-                    $("#"+movieId).attr("src", result.items[0].link);
-                });
-    }         
-    else
-    {
-      var movieId = movie.split(" ").join("-");
-      $("#"+movieId).attr("src", imgURL);
+      var $poster = $(event.target).parents("div.poster"),
+          movieId = $poster.data("movie-id"),
+          $prevSelectedPoster = $("div.poster.selected");
+
+      if ($prevSelectedPoster) {
+        $prevSelectedPoster.removeClass("selected");
+      }
+      $("ul img").each(function(index, element) {
+        $(element).css('border', '3px solid black');
+      });
+      $("[data-movie-id="+movieId+"]").addClass("selected");
+      //** trigger event that tweets_list subscribes to and updates accordingly 
+      Backbone.Events.trigger("me:renderTweetList", $poster.data("movie-title"));
+    },
+    addMovie: function() {
+    /*          var movie = new Movie();
+      movie.title = $("#movieVal").val();
+      this.collection.add(movie);
+      this.render();
+    */
+    },
+    search: function(event) {
+      console.log("hi");
     }
-  },
-
-  highlightMovie: function(event)
-  {
-    $("ul img").each(function(index, element) {
-      $(element).css('border', '3px solid black');
-    });
-    $(event.srcElement).css('border', "3px solid blue"); 
-  //          console.log(event);
-  }
-
   });
-
-return MovieList;
+  return MovieList;
 })

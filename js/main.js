@@ -5,8 +5,8 @@ require.config({
         underscore: "lib/underscore-amd",
         backbone: "lib/backbone-amd",
         mustache: "http://cdnjs.cloudflare.com/ajax/libs/mustache.js/0.7.2/mustache.min",
-//        sha1: "sha1",
-//        codebird: "codebird",
+        sha1: "lib/sha1",
+        codebird: "lib/codebird",
         less: "http://cdnjs.cloudflare.com/ajax/libs/less.js/1.5.0/less.min",
         bootstrap: "http://netdna.bootstrapcdn.com/bootstrap/3.0.2/js/bootstrap.min",
         text: "lib/text",
@@ -22,14 +22,24 @@ require([
   'underscore', 
   'backbone',
   'models/movie',
+  'models/tmdb_config',
   'collections/movies',
   'views/movies_list',
+  'views/tweets_list',
   'async!http://maps.google.com/maps/api/js?sensor=false',
   'less',
-  'bootstrap'
+  'bootstrap',
+  'sha1',
+  'codebird'
 ], 
-function($, _, Backbone, MovieModel, MoviesCollection, MovieList) {
-  var movieList = new MovieList();
+function($, _, Backbone, MovieModel, TMDBConfig, MoviesCollection, MovieList, TweetsList) {
+
+  $.when(TMDBConfig.fetch()).then(function() {
+    var movieList = new MovieList(); 
+    var tweetsList = new TweetsList();  
+  });
+/*  tmdbConfig.then();
+  var movieList = new MovieList();  */
 //google.maps.event.addDomListener(window, 'load', initialize);  
   /*
 
