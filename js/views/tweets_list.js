@@ -3,26 +3,25 @@ define([
   'underscore',
   'backbone',
   'mustache',
-  'models/tweet',
   'models/tmdb_config',
   'collections/tweets',
   'text!../../templates/tweets_list.html'
 ], 
-function($, _, Backbone, Mustache, Tweet, TMDBConfig, TweetsCollection, TweetsListTemplate) {
+function($, _, Backbone, Mustache, TMDBConfig, TweetsCollection, TweetsListTemplate) {
   var TweetList = Backbone.View.extend({
     el: "#tweets-container",
     events: {
     },
     initialize: function() {
       Backbone.Events.on("me:renderTweetList", _.bind(this.render, this));
-      this.collection = TweetsCollection;
+      this.collection = new TweetsCollection();
       //** listen for reloading ('reset' event) of the tweets collection
       this.listenTo(this.collection, "reset", _.bind(this.renderTweetList, this));
     },
     
     render: function() {
       var that = this;
-      TweetsCollection.fetch({
+      this.collection.fetch({
         title: $(".selected").data("movie-title"),
       });
 /*

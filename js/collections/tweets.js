@@ -3,10 +3,8 @@ define([
 	'underscore',
 	'backbone',
 	'models/tweet'
-], function($, _, Backbone) {
+], function($, _, Backbone, TweetModel) {
 	var Tweets = Backbone.Collection.extend({
-		tmdb_base_url: "",
-		url: "",
 		initialize: function() {
 
 		},
@@ -31,10 +29,14 @@ define([
 				function (response) {
 				    var tweetObjs = response.statuses;
 				    console.log(tweetObjs);
+				    //** tweets will be an array of Tweet model objects
 				    var tweets = [];
 				    for (var i = 0; i < tweetObjs.length; i++)
 				    {
-				      tweets.push({"content": tweetObjs[i].text});
+				    	var tweetModel = new TweetModel({
+				    		content: tweetObjs[i].text
+				    	});
+				    	tweets.push(tweetModel);
 				    }
 				    //** set collection models to the new array of tweets
 				    that.reset(tweets);
@@ -49,5 +51,5 @@ define([
 		searchTweets: function(title, fn) {
 		}
     });	
-	return new Tweets();
+	return Tweets;
 });
