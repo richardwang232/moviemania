@@ -5,24 +5,24 @@ define([
   'mustache',
   'models/movie',
   'models/tmdb_config',
-  'collections/movies',
   'text!../../templates/movies_list.html'
 ], 
-function($, _, Backbone, Mustache, Movie, TMDBConfig, MoviesCollection, MoviesListTemplate) {
+function($, _, Backbone, Mustache, MovieModel, TMDBConfig, MoviesListTemplate) {
   var MovieList = Backbone.View.extend({
     el: "#movies-container",
     events: {
-      "click .addMovieBtn": "addMovie",
       "click img": "highlightMovie",
 
     },
-    initialize: function() {
+
+    initialize: function(options) {
       var that = this;
-      this.collection = MoviesCollection;
+      this.savedMovies = options.savedMovies;
       this.collection.fetch({
         success: _.bind(that.render, this)
       });
     },
+
     render: function() {
       var movies = this.collection.toJSON();
       var that = this;
@@ -58,12 +58,14 @@ function($, _, Backbone, Mustache, Movie, TMDBConfig, MoviesCollection, MoviesLi
       $('.carousel .item').eq(0).addClass("active");
       //** end of that code 
     },
+
     highlightMovie: function(event)
     {
       var $poster = $(event.target).parents("div.poster"),
           movieId = $poster.data("movie-id"),
-          $prevSelectedPoster = $("div.poster.selected");
-
+          $prevSelectedPoster = $("div.poster.selected"),
+          movie = this.collection.get(movieId);
+      this.saveMovie(movie);
       if ($prevSelectedPoster) {
         $prevSelectedPoster.removeClass("selected");
       }
@@ -74,12 +76,12 @@ function($, _, Backbone, Mustache, Movie, TMDBConfig, MoviesCollection, MoviesLi
       //** trigger event that tweets_list subscribes to and updates accordingly 
       Backbone.Events.trigger("me:renderTweetList", $poster.data("movie-title"));
     },
-    addMovie: function() {
-    /*          var movie = new Movie();
-      movie.title = $("#movieVal").val();
-      this.collection.add(movie);
-      this.render();
-    */
+
+    saveMovie: function(movie) {
+      var m = new MovieModel();
+      m.set("title", movie.get('title'));
+      this.savedMovies.add(m);
+      m.save();
     },
     search: function(event) {
       console.log("hi");

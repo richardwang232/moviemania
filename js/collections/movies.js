@@ -14,5 +14,5 @@ define([
 			return response.results;
 		}
       });	
-	return new Movies();
+	return Movies;
 });

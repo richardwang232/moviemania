@@ -38,6 +38,9 @@
         <h1>MovieMania</h1>
         <p class="lead">Use this document as a way to quickly start any new project.<br> All you get is this text and a mostly barebones HTML document.</p>
       </div>
+    <h2> Saved Movies </h2>
+    <ul id="saved-movies">
+    </ul>
     <form id="search-movies-form" class="col-md-3 col-md-offset-4">
       <input type="text" name="search-movie"/>
       <input type="submit" val="Go"/>
@@ -51,26 +54,6 @@
     <div id="tweets-container" class="col-md-9 col-md-offset-2">
     </div>
 
-    <div id="map-canvas"></div>
 
-<!--
-    <div class="tweets-container">
-        <img src="twitter.png">
-        <p class="text-center">Click on a movie image to begin!</p>
-
-            <script type="text/template" id="tweet_template">
-                                        <img src="twitter.png">
-
-              <div class="tweets">
-            <p class="text-center"> <b> <%= title %> </b> </p>
-        <ul>
-        <% _.each(tweets, function(tweet) { %>
-        <li> <%= tweet.content %>
-        
-        </li>
-        <% }); %>
-        </div>
-
-    </div> -->
   </body>
 </html>
