@@ -65,7 +65,9 @@ function($, _, Backbone, Mustache, MovieModel, TMDBConfig, MoviesListTemplate) {
           movieId = $poster.data("movie-id"),
           $prevSelectedPoster = $("div.poster.selected"),
           movie = this.collection.get(movieId);
-      this.saveMovie(movie);
+
+      Backbone.Events.trigger("me:saveMovie", movie);
+      
       if ($prevSelectedPoster) {
         $prevSelectedPoster.removeClass("selected");
       }
@@ -77,12 +79,6 @@ function($, _, Backbone, Mustache, MovieModel, TMDBConfig, MoviesListTemplate) {
       Backbone.Events.trigger("me:renderTweetList", $poster.data("movie-title"));
     },
 
-    saveMovie: function(movie) {
-      var m = new MovieModel();
-      m.set("title", movie.get('title'));
-      this.savedMovies.add(m);
-      m.save();
-    },
     search: function(event) {
       console.log("hi");
     }

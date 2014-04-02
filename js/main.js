@@ -28,6 +28,7 @@ require([
   'collections/saved_movies',
   'views/movies_list',
   'views/tweets_list',
+  'views/saved_movies',
   'text!../templates/saved_movies_list.html',
   'mustache',
   'localstorage',
@@ -36,23 +37,24 @@ require([
   'sha1',
   'codebird'
 ], 
-function($, _, Backbone, MovieModel, TMDBConfig, MoviesCollection, SavedMoviesCollection, MovieList, TweetsList, SavedMoviesTemplate, Mustache) {
+function($, _, Backbone, MovieModel, TMDBConfig, MoviesCollection, SavedMoviesCollection, MoviesView, TweetsView, SavedMoviesView, SavedMoviesTemplate, Mustache) {
 
   $.when(TMDBConfig.fetch()).then(function() {
     var savedMovies = new SavedMoviesCollection();
     var movies = new MoviesCollection();
+
+    var savedMoviesView = new SavedMoviesView({collection: savedMovies});
+    var moviesView = new MoviesView({collection: movies}); 
+    var tweetsView = new TweetsView();  
+/*
     savedMovies.fetch({
       success: function() {
-        var template = Mustache.render(SavedMoviesTemplate, {
-          movies : savedMovies.toJSON(),
-          base_url : TMDBConfig.get("images").base_url, //** from TMDB /config API call
-          poster_size : TMDBConfig.get("images").poster_sizes[5]
-        });
-        $('#saved-movies').html(template);
-        var movieList = new MovieList({collection: movies, savedMovies: savedMovies}); 
-        var tweetsList = new TweetsList();       
+        var savedMoviesView = new SavedMoviesView({collection: savedMovies});
+        var moviesView = new MoviesView({collection: movies}); 
+        var tweetsView = new TweetsView();       
       }
     });
+*/
  
   });
 /*  tmdbConfig.then();
