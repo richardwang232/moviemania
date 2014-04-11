@@ -16,7 +16,9 @@ function($, _, Backbone, Mustache, MovieModel, TMDBConfig, SavedMoviesTemplate) 
   	initialize: function() {
   		Backbone.Events.on("me:saveMovie", _.bind(this.addMovie, this));
   		Backbone.Events.listenTo(this.collection, 'remove', _.bind(this.render, this));
-  		this.render();
+      this.collection.fetch({
+        success: _.bind(this.render, this)
+      });
   	},
   	render: function() {
         var template = Mustache.render(SavedMoviesTemplate, {
