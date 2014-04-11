@@ -43,7 +43,7 @@ function($, _, Backbone, Mustache, MovieModel, TMDBConfig, SavedMoviesTemplate) 
   	deleteMovie: function(event) {
   		event.preventDefault();
   		var that = this;
-  		var movie_id = $(event.target).data('id');
+  		var movie_id = $(event.currentTarget).data('id');
   		var saved_movie = this.collection.get(movie_id);
 //  		that.collection.remove(movie_id);
 //  		saved_movie.destroy().then(_.bind(that.render, that)).fail(alert("Unable to delete movie"));
