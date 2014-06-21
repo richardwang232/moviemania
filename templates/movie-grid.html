@@ -1,0 +1,8 @@
+<div>
+	{{#movies}}
+	<div class="item">
+		{{title}}
+	  <div class="col-md-4 poster" data-movie-id="{{id}}" data-movie-title="{{title}}"><a href="#"><img src="{{base_url}}{{poster_size}}{{poster_path}}" class="img-responsive"></a></div>
+	</div>
+	{{/movies}}
+</div>

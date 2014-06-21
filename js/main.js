@@ -26,6 +26,7 @@ require([
   'models/tmdb_config',
   'collections/movies',
   'collections/saved_movies',
+  'views/movie-grid',
   'views/movies_list',
   'views/tweets_list',
   'views/saved_movies',
@@ -37,15 +38,17 @@ require([
   'sha1',
   'codebird'
 ], 
-function($, _, Backbone, MovieModel, TMDBConfig, MoviesCollection, SavedMoviesCollection, MoviesView, TweetsView, SavedMoviesView, SavedMoviesTemplate, Mustache) {
+function($, _, Backbone, MovieModel, TMDBConfig, MoviesCollection, SavedMoviesCollection, MovieGridView, MoviesView, TweetsView, SavedMoviesView, SavedMoviesTemplate, Mustache) {
 
   $.when(TMDBConfig.fetch()).then(function() {
     var savedMovies = new SavedMoviesCollection();
     var movies = new MoviesCollection();
 
-    var savedMoviesView = new SavedMoviesView({collection: savedMovies});
-    var moviesView = new MoviesView({collection: movies}); 
-    var tweetsView = new TweetsView();  
+    var moviesView = new MovieGridView({collection: movies});
+
+//    var savedMoviesView = new SavedMoviesView({collection: savedMovies});
+//    var moviesView = new MoviesView({collection: movies}); 
+//    var tweetsView = new TweetsView();  
 /*
     savedMovies.fetch({
       success: function() {
