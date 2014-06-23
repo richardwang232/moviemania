@@ -1,8 +1,22 @@
-<div>
-	{{#movies}}
-	<div class="item">
-		{{title}}
-	  <div class="col-md-4 poster" data-movie-id="{{id}}" data-movie-title="{{title}}"><a href="#"><img src="{{base_url}}{{poster_size}}{{poster_path}}" class="img-responsive"></a></div>
-	</div>
-	{{/movies}}
+<div class="pagination">
+	<button type="button" class="prev-page btn btn-primary {{^hasPreviousPage}}disabled{{/hasPreviousPage}}">Prev</button>	
+	{{#pages}}
+	<a href="#" class="page" data-page="{{page_number}}">
+		{{#isCurrentPage}}
+			{{page_number}}
+		{{/isCurrentPage}}
+	</a>
+	{{/pages}}
+	<button type="button" class="next-page btn btn-primary {{^hasNextPage}}disabled{{/hasNextPage}}">Next</button>
 </div>
+
+{{#movies}}
+<div class="item container col-md-6">
+  <div class="col-md-6 poster" data-movie-id="{{id}}" data-movie-title="{{title}}"><img src="{{base_url}}{{poster_size}}{{poster_path}}" class="img-responsive"></div>
+  <p class="col-md-6">
+  	<h2>{{title}}</h2>
+  	<p>{{release_date}}</p>
+  	<p>{{vote_average}}</p>
+  </p>
+</div>
+{{/movies}}
