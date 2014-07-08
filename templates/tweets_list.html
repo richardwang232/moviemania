@@ -1,4 +1,6 @@
-<h2><i class="fa fa-twitter"></i>Relevant Tweets</h2>
+<h2>
+    <i class="fa fa-twitter"></i>{{#movie_title}}Relevant Tweets for <em>{{movie_title}}</em>{{/movie_title}}
+</h2>
 
 <div class="tweets">
 	<p> <b></b> </p>
@@ -12,7 +14,7 @@
         {{/tweets}}
 
         {{^tweets}}
-        No tweets found.
+        No tweets.
         {{/tweets}}
     </ul>
 </div>

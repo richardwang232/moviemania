@@ -21,7 +21,8 @@ function($, _, Backbone, Mustache, TMDBConfig, TweetsCollection, TweetsListTempl
     render: function() {
       var that = this;
       var template = Mustache.render(TweetsListTemplate, {
-        tweets: this.collection.toJSON()
+        tweets: this.collection.toJSON(),
+        movie_title: this.collection.title
       });
       this.$el.html(template);
     },
@@ -29,7 +30,7 @@ function($, _, Backbone, Mustache, TMDBConfig, TweetsCollection, TweetsListTempl
     // called every time we want to get the tweets from a movie
     renderTweetList : function(title) {
       this.collection.title = title;
-      this.collection.fetch().then(_.bind(this.render, this));
+      this.collection.fetch().done(_.bind(this.render, this));
     }
   });
   
