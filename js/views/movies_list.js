@@ -66,7 +66,7 @@ function($, _, Backbone, Mustache, MovieModel, TMDBConfig, MoviesListTemplate) {
           $prevSelectedPoster = $("div.poster.selected"),
           movie = this.collection.get(movieId);
 
-      Backbone.Events.trigger("me:saveMovie", movie);
+//      Backbone.Events.trigger("me:saveMovie", movie);
       
       if ($prevSelectedPoster) {
         $prevSelectedPoster.removeClass("selected");

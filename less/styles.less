@@ -31,14 +31,16 @@ ul img
 }
 .poster img {
   padding: 1px;
-  border: 1px solid black;
+  width: 150px;
+  height: 200px;
 }
 .poster.selected img {
   border: 3px solid blue;
 }
 .item {
 /*    margin-left: 15%; */
-  border: 1px solid black;
+  display: inline-block;
+  margin: 5px;
 }
 #search-movies-form {
     margin-top: 20px;
@@ -52,7 +54,12 @@ ul img
   display: inline-block;
   border: 1px solid #CCCCCC;
 }
-
+#saved-movies {
+  font-size: 1.5em;
+  li {
+    list-style-type: none;
+  }
+}
 .carousel-inner .active.left { left: -33%; }
 .carousel-inner .active.right { left: 33%; }
 .carousel-inner .next        { left:  33%; }

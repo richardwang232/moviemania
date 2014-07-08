@@ -11,7 +11,7 @@ define([
 		url: "https://api.themoviedb.org/3/movie/now_playing?api_key=00b1a245c429c285c83f95fbb86180be",
 		tmdb_base_url: "",
 		state: {
-			pageSize: 4
+			pageSize: 8
 		},
 		initialize: function() {
 

@@ -13,44 +13,53 @@ function($, _, Backbone, Mustache, MovieModel, TMDBConfig, MovieGridTemplate) {
   	events: {
   		'click .next-page': 'next',
   		'click .prev-page': 'prev',
-  		'click .page': 'goToPage'
+  		'click .page': 'goToPage',
+      'click .save-movie': 'saveMovie'
   	},
   	initialize: function() {
   		var that = this;
-		this.collection.fetch({
-			success: _.bind(that.render, this)
-		});
+      this.collection.fetch({
+      	success: _.bind(that.render, this)
+      });
   	},
   	render: function() {
   		var that = this;
-		var pages = [];
-		for (var i=this.collection.state.firstPage; i <= this.collection.state.lastPage; i++) {
-			pages.push({
-				page_number: i
-			})
-		}
+  		var pages = [];
+  		for (var i=this.collection.state.firstPage; i <= this.collection.state.lastPage; i++) {
+  			pages.push({
+  				page_number: i
+  			})
+  		}
   		var context = {
   			movies: this.collection.toJSON(),
 	        base_url : TMDBConfig.get("images").base_url, //** from TMDB /config API call
 	        poster_size : TMDBConfig.get("images").poster_sizes[5],
-			hasPreviousPage: (this.collection.state.currentPage > this.collection.state.firstPage),
-			hasNextPage: (this.collection.state.currentPage < this.collection.state.lastPage),
-			pages: pages,
-			isCurrentPage: function() {
-				return function(val, render) {
-					var page_number = parseInt(render(val),10);
-					if (page_number === that.collection.state.currentPage) {
-						return "<b>" + render(val) + "</b>";
-					}
-					else {
-						return render(val);
-					}
-				}
-			}
+    			hasPreviousPage: (this.collection.state.currentPage > this.collection.state.firstPage),
+    			hasNextPage: (this.collection.state.currentPage < this.collection.state.lastPage),
+    			pages: pages,
+    			isCurrentPage: function() {
+    				return function(val, render) {
+    					var page_number = parseInt(render(val),10);
+    					if (page_number === that.collection.state.currentPage) {
+    						return "<b>" + render(val) + "</b>";
+    					}
+    					else {
+    						return render(val);
+    					}
+    				}
+    			}
   		};
   		this.$el.html(Mustache.render(MovieGridTemplate, context));
   		this.delegateEvents();
   	},
+    saveMovie: function(event) {
+      event.preventDefault();
+      var $poster = $(event.target).parents(".item").eq(0),
+          movieId = $poster.data("movie-id"),
+          movie = this.collection.get(movieId);
+
+      Backbone.Events.trigger("me:saveMovie", movie);
+    },
   	next: function() {
   		this.collection.getNextPage();
   		this.render();
@@ -59,11 +68,11 @@ function($, _, Backbone, Mustache, MovieModel, TMDBConfig, MovieGridTemplate) {
   		this.collection.getPreviousPage();
   		this.render();
   	},
-	goToPage: function(event) {
-		event.preventDefault();
-		var page_number = $(event.target).data('page');
-		this.collection.getPage(page_number);
-		this.render();
+    goToPage: function(event) {
+  		event.preventDefault();
+  		var page_number = $(event.target).data('page');
+  		this.collection.getPage(page_number);
+  		this.render();
 	}
   });
   return MovieGrid;

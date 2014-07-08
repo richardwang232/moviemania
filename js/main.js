@@ -42,46 +42,12 @@ require([
 function($, _, Backbone, MovieModel, TMDBConfig, MoviesCollection, SavedMoviesCollection, MovieGridView, MoviesView, TweetsView, SavedMoviesView, SavedMoviesTemplate, Mustache) {
 
   $.when(TMDBConfig.fetch()).then(function() {
-//    var savedMovies = new SavedMoviesCollection();
+    var savedMovies = new SavedMoviesCollection();
     var movies = new MoviesCollection();
 
     var moviesView = new MovieGridView({collection: movies});
-
-//    var savedMoviesView = new SavedMoviesView({collection: savedMovies});
-//    var moviesView = new MoviesView({collection: movies}); 
-//    var tweetsView = new TweetsView();  
-/*
-    savedMovies.fetch({
-      success: function() {
-        var savedMoviesView = new SavedMoviesView({collection: savedMovies});
-        var moviesView = new MoviesView({collection: movies}); 
-        var tweetsView = new TweetsView();       
-      }
-    });
-*/
+    var savedMoviesView = new SavedMoviesView({collection: savedMovies});
+    var tweetsView = new TweetsView().render();  
  
   });
-/*  tmdbConfig.then();
-  var movieList = new MovieList();  */
-//google.maps.event.addDomListener(window, 'load', initialize);  
-  /*
-
-
-
-
-var tweetList = new TweetList();
-
-
-
-var router = new Router();
-router.on('route:home', function() {
-    movieList.render();
-});
-router.on('route:tweets', function(title) {
-  $('.tweets').remove();
-    tweetList.render(title);
-});
-
-Backbone.history.start();
-*/
 });

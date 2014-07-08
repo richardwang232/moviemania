@@ -13,38 +13,26 @@ function($, _, Backbone, Mustache, TMDBConfig, TweetsCollection, TweetsListTempl
     events: {
     },
     initialize: function() {
-      Backbone.Events.on("me:renderTweetList", _.bind(this.render, this));
+      var that = this;
+      Backbone.Events.on("me:renderTweetList", _.bind(this.renderTweetList, this));
       this.collection = new TweetsCollection();
-      //** listen for reloading ('reset' event) of the tweets collection
-      this.listenTo(this.collection, "reset", _.bind(this.renderTweetList, this));
     },
     
     render: function() {
       var that = this;
-      this.collection.fetch({
-        title: $(".selected").data("movie-title"),
+      var template = Mustache.render(TweetsListTemplate, {
+        tweets: this.collection.toJSON()
       });
-/*
-      var title = decodeURIComponent(title);
-      var tweets = this.getTweets(title, function(title, tweets) {
-        var template = me.template({title: title, tweets: tweets});
-        me.$el.hide().html(template).fadeIn(800);              
-      });
-*/        
-    },
-    //** called every time we want to get the tweets from a movie
-    renderTweetList : function(tweets) {
-      var tweets = this.collection.toJSON();
-      var template = Mustache.render(TweetsListTemplate, {tweets:tweets});
       this.$el.html(template);
-    }
-/*
-    getTweets: function(title, fn) {
+    },
 
-     fn(title,movieTweets[title]);
-
+    // called every time we want to get the tweets from a movie
+    renderTweetList : function(tweets) {
+      this.collection.title = arguments[0];
+      var func = _.bind(this.render, this);
+      this.collection.fetch().then(func);
     }
-*/
   });
+  
   return TweetList;
 });

@@ -5,6 +5,8 @@ define([
 	'models/tweet'
 ], function($, _, Backbone, TweetModel) {
 	var Tweets = Backbone.Collection.extend({
+		localStorage: new Backbone.LocalStorage("tweets"),
+		model: TweetModel,
 		initialize: function() {
 			//this only needs to be done once, get bearer token for OAuth Twitter
 			this.cb = new Codebird;
@@ -17,40 +19,38 @@ define([
 			        console.log(bearer_token);
 			    }
 			);
+			//use jQuery deferreds to override sync behavior for Twitter OAuth REST call
+			this.promise = $.Deferred();
 		},
 		sync: function(method, model, options) {
 			var that = this;
+
 			if (method === 'read') {
-				var title = options.title;
-				
-				//** this is back-end API call code...should put in sync
-				this.cb.__call(
-				"search_tweets",
-				"q="+encodeURIComponent(title)+"&lang=en",
-				function (response) {
-				    var tweetObjs = response.statuses;
-				    console.log(tweetObjs);
-				    //** tweets will be an array of Tweet model objects
-				    var tweets = [];
-				    for (var i = 0; i < tweetObjs.length; i++)
-				    {
-				    	var tweetModel = new TweetModel({
-				    		content: tweetObjs[i].text
-				    	});
-				    	tweets.push(tweetModel);
-				    }
-				    //** set collection models to the new array of tweets
-				    that.reset(tweets);
-//				    return true;
-				},
-				true // this parameter required
-				);
+				var title = this.title;
+				return this._getNewTweets(title);
+
 			}
 			else {
-				Backbone.sync.apply(this, arguments);
+				Backbone.sync.apply(this, arguments);				
 			}
+		}, 
+		_getNewTweets: function(title) {
+			var that = this;
+			// this is back-end API call code
+			this.cb.__call(
+			"search_tweets",
+			"q="+encodeURIComponent(title)+"&lang=en",
+			function (response) {
+				//some jquery promise action
+				that.reset(that.parse(response));
+				that.promise.resolve();
+			},
+			true // this parameter required
+			);
+			return this.promise;
 		},
-		searchTweets: function(title, fn) {
+		parse: function(response) {
+			return response.statuses;
 		}
     });	
 	return Tweets;
