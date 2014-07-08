@@ -27,10 +27,9 @@ function($, _, Backbone, Mustache, TMDBConfig, TweetsCollection, TweetsListTempl
     },
 
     // called every time we want to get the tweets from a movie
-    renderTweetList : function(tweets) {
-      this.collection.title = arguments[0];
-      var func = _.bind(this.render, this);
-      this.collection.fetch().then(func);
+    renderTweetList : function(title) {
+      this.collection.title = title;
+      this.collection.fetch().then(_.bind(this.render, this));
     }
   });
   

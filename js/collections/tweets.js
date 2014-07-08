@@ -16,7 +16,6 @@ define([
 			    {},
 			    function (reply) {
 			        var bearer_token = reply.access_token;
-			        console.log(bearer_token);
 			    }
 			);
 			//use jQuery deferreds to override sync behavior for Twitter OAuth REST call
