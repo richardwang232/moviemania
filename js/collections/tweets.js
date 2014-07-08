@@ -18,8 +18,6 @@ define([
 			        var bearer_token = reply.access_token;
 			    }
 			);
-			//use jQuery deferreds to override sync behavior for Twitter OAuth REST call
-			this.promise = $.Deferred();
 		},
 		sync: function(method, model, options) {
 			var that = this;
@@ -35,6 +33,8 @@ define([
 		}, 
 		_getNewTweets: function(title) {
 			var that = this;
+			//use jQuery deferreds to override sync behavior for Twitter OAuth REST call
+			this.promise = $.Deferred();
 			// this is back-end API call code
 			this.cb.__call(
 			"search_tweets",
@@ -46,7 +46,7 @@ define([
 			},
 			true // this parameter required
 			);
-			return this.promise;
+			return this.promise.promise();
 		},
 		parse: function(response) {
 			return response.statuses;
