@@ -8,9 +8,11 @@
     <ul>
     	{{#tweets}}
         <li>
-        	<div><img src="{{user.profile_image_url}}"/><em>{{user.screen_name}}</em></div>
+        	<div><img src="{{user.profile_image_url}}"/><em>{{user.screen_name}}</em>
+            <p style="float: right;"><em>{{created_at}}</em></p>
+            </div>
         	<p>{{text}}</p>
-        	<p><em>{{created_at}}</em></p>
+        	
         </li>
         {{/tweets}}
 
