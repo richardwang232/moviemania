@@ -29,10 +29,35 @@ ul img
     border: 3px solid black;
 
 }
-.poster img {
-  padding: 1px;
-  width: 150px;
-  height: 200px;
+.poster:hover .save {
+  opacity: 0.4;
+}
+.poster {
+  img {
+    padding: 1px;
+    width: 150px;
+    height: 200px;
+  }
+  .save {
+    background-color: #000;
+    opacity: 0;
+    z-index: 2; 
+    position: absolute;
+    top: 0;
+    right: 0; 
+    left: 0; 
+    bottom: 0;   
+    text-align: center; 
+    color: #FFF; 
+    font-size: 4.0em;
+  }
+  .save:before {
+  content: '';
+  display: inline-block;
+  height: 100%;
+  vertical-align: middle;
+  /* margin-right: -0.25em; */
+  }
 }
 .poster.selected img {
   border: 3px solid blue;

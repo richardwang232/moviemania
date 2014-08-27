@@ -13,8 +13,9 @@
 <div class="container">
 {{#movies}}
 <div class="item" data-movie-id="{{id}}" data-movie-title="{{title}}">
-  <div class="poster">
+  <div class="poster" style="position:relative; display: inline-block;">
   	<img src="{{base_url}}{{poster_size}}{{poster_path}}" class="img-responsive">
+  	<div class="save"><i class="fa fa-plus save-movie"></i></div>
   </div>
   <p class="">
   	<h4>{{title}}</h4>
