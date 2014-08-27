@@ -14,7 +14,7 @@ function($, _, Backbone, Mustache, MovieModel, TMDBConfig, MovieGridTemplate) {
   		'click .next-page': 'next',
   		'click .prev-page': 'prev',
   		'click .page': 'goToPage',
-      'click .save-movie': 'saveMovie'
+      'click .save-movie': 'saveMovie',
   	},
   	initialize: function() {
   		var that = this;
@@ -73,7 +73,7 @@ function($, _, Backbone, Mustache, MovieModel, TMDBConfig, MovieGridTemplate) {
   		var page_number = $(event.target).data('page');
   		this.collection.getPage(page_number);
   		this.render();
-	}
+    }
   });
   return MovieGrid;
 });
